@@ -11,45 +11,39 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in tableData" :key="row.id">
-          <td>{{ row.id }}</td>
-          <td>{{ row.name }}</td>
-          <td>{{ row.email }}</td>
+        <tr v-for="item in tableData" :key="item.id">
+          <td>{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.email }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
 
-<script setup>
+<script>
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://zquxlcxmdsuijzrafgkr.supabase.co/rest/v1/hello-vue?';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxdXhsY3htZHN1aWp6cmFmZ2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM3MTcxMTYsImV4cCI6MjAyOTI5MzExNn0.bo8vdKntIytMdo_RryCpOV_ebW_nPqSUma6VAlO9UOo';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-const tableData = ref([]);
-const isLoading = ref(true);
-
-const fetchData = async () => {
-  try {
-    const { data, error } = await supabase.from('hello-vue').select('*');
-    if (error) {
-      throw new Error(error.message);
+export default {
+  name: 'App',
+  data() {
+    return {
+      tableData: [],
+      isLoading: true
     }
-    if (!data) {
-      throw new Error('No data returned from Supabase.');
+  },
+  async mounted() {
+    await this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const supabaseUrl = 'https://zquxlcxmdsuijzrafgkr.supabase.co/rest/v1/hello-vue?';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxdXhsY3htZHN1aWp6cmFmZ2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM3MTcxMTYsImV4cCI6MjAyOTI5MzExNn0.bo8vdKntIytMdo_RryCpOV_ebW_nPqSUma6VAlO9UOo';
+
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        const { data, error } = await supabase.from('hello-vue').select('*');
     }
-    tableData.value = data;
-    isLoading.value = false;
-  } catch (error) {
-    console.error('Error fetching data from Supabase:', error.message);
-    isLoading.value = false;
   }
-};
-
-onMounted(() => {
-  fetchData();
-});
+}
 </script>
