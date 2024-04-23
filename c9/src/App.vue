@@ -43,6 +43,7 @@ export default {
 
         const supabase = createClient(supabaseUrl, supabaseKey);
         const { data, error } = await supabase.from('hello-vue').select('*');
+
     }
   }
 }
