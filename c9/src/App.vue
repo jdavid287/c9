@@ -44,6 +44,21 @@ export default {
         const supabase = createClient(supabaseUrl, supabaseKey);
         const { data, error } = await supabase.from('hello-vue').select('*');
 
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          this.tableData = data;
+        } else {
+          console.log('No data returned from Supabase');
+        }
+
+        this.isLoading = false;
+      } catch (error) {
+        console.error('Error fetching data from Supabase:', error.message);
+        this.isLoading = false;
+      }
     }
   }
 }
